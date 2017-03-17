@@ -7,15 +7,21 @@ PImage destination;
 
 int imgNum = 13525;
 String path = "6/img";
-
+int firstImg = 13525;
+int lastImg = 13635;
 /**
  * Loads our initial image, sets up destination buffer for edge detector and sets the output window size. 
  */
-void setup() {
+void settings() {
   source = loadImage(path + imgNum + ".jpg");
   destination = createImage(source.width, source.height, RGB);
   size(source.width, source.height);
 }
+
+
+//void setup() {
+//  //size(240,320); //Note: Integer literals are required here, and the doc says that this should be on the first line of setup()
+//}
 
 /**
  * Called repeatedly.
@@ -23,23 +29,24 @@ void setup() {
  * and overlays it on either the source image or the image containing the detected edges.
  */
 void draw() {
-  source = loadImage(path + imgNum + ".jpg");
+  ;
+  source = loadImage(path + constrain(imgNum, firstImg, lastImg) + ".jpg");
   background(0);  // Set black background
 
   // Camera wasn't aligned, so rotate the image a bit (a bit hacky, but it works)
   pushMatrix();
   rotate(radians(-5));
   image(source, 0, 0);
-  source = get();
+  source = get(); //returns a PImage containing the frame buffer of this PApplet
   popMatrix();
 
   // Load source image into .pixels array
   source.loadPixels();
 
   // Edge detection enhanced for vertical lines from source to destination
-  float[][] matrix = { { -1, -1, -1 },
-                       { -1,  9, -1 },
-                       { -1, -1, -1 } }; 
+  float[][] matrix = { { -1, -1, -1 }, 
+    { -1, 9, -1 }, 
+    { -1, -1, -1 } }; 
   for (int x = 1; x < source.width-1; x++) {
     for (int y = 1; y < source.height-1; y++ ) {
       float sum = 0;
@@ -120,4 +127,3 @@ void keyPressed() {
     }
   }
 }
-
