@@ -1,27 +1,47 @@
 /**
  * @author Steffen Furholm
  */
+import java.io.File;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 PImage source;
 PImage destination;
 
-int imgNum = 13525;
+int imgNum = 0;//13525;
 String path = "6/img";
 int firstImg = 13525;
 int lastImg = 13635;
+List<PImage> images = new ArrayList();
+
 /**
  * Loads our initial image, sets up destination buffer for edge detector and sets the output window size. 
  */
+
 void settings() {
-  source = loadImage(path + imgNum + ".jpg");
+  List<String> imagePaths = new ArrayList();
+
+  for (File f : new File("/Users/jason/git/PegSlideDetector/newCameraMountCalibration").listFiles()) {
+    if (f.getName().endsWith(".jpg")) {
+      imagePaths.add(f.getAbsolutePath());
+    }
+  }
+  if (imagePaths.size() > 100) {
+    print("too many images!");
+    exit();
+  }
+  Collections.sort(imagePaths);
+
+  for (String path : imagePaths) {
+    images.add(loadImage(path));
+  }
+
+  source = images.get(0);
   destination = createImage(source.width, source.height, RGB);
   size(source.width, source.height);
 }
 
-
-//void setup() {
-//  //size(240,320); //Note: Integer literals are required here, and the doc says that this should be on the first line of setup()
-//}
 
 /**
  * Called repeatedly.
@@ -29,8 +49,8 @@ void settings() {
  * and overlays it on either the source image or the image containing the detected edges.
  */
 void draw() {
-  ;
-  source = loadImage(path + constrain(imgNum, firstImg, lastImg) + ".jpg");
+
+  source = images.get(imgNum % (images.size()-1));
   background(0);  // Set black background
 
   // Camera wasn't aligned, so rotate the image a bit (a bit hacky, but it works)
