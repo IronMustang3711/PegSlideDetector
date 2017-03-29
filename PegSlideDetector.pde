@@ -55,7 +55,7 @@ void draw() {
 
   // Camera wasn't aligned, so rotate the image a bit (a bit hacky, but it works)
   pushMatrix();
-  rotate(radians(-5));
+  rotate(radians(-2));
   image(source, 0, 0);
   source = get(); //returns a PImage containing the frame buffer of this PApplet
   popMatrix();
@@ -87,7 +87,7 @@ void draw() {
   destination.updatePixels();
 
   // Uncomment the following line to see the detected edges instead of the source image 
-  //image(destination, 0, 0);
+  image(destination, 0, 0);
 
   // Clear histogram
   int[] histogram = new int[source.width];
